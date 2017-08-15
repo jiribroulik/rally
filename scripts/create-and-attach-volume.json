@@ -1,0 +1,60 @@
+{% set flavor_name = flavor_name or "m1.tiny" %}
+{% set availability_zone = availability_zone or "nova" %}
+{
+    "CinderVolumes.create_and_attach_volume": [
+        {
+            "args": {
+                "size": 1,
+                "image": {
+                    "name": "^cirros$"
+                },
+                "flavor": {
+                    "name": "{{flavor_name}}"
+                },
+                "create_volume_params": {
+                    "availability_zone": "{{availability_zone}}"
+                }
+            },
+            "runner": {
+                "type": "constant",
+                "times": 2,
+                "concurrency": 2
+            },
+            "context": {
+                "users": {
+                    "tenants": 1,
+                    "users_per_tenant": 1
+                }
+            }
+        },
+        {
+            "args": {
+                "size": {
+                    "min": 1,
+                    "max": 5
+                },
+                "flavor": {
+                    "name": "{{flavor_name}}"
+                },
+                "image": {
+                    "name": "^cirros$"
+                },
+                "create_volume_params": {
+                    "availability_zone": "{{availability_zone}}"
+                }
+            },
+            "runner": {
+                "type": "constant",
+                "times": 2,
+                "concurrency": 2
+            },
+            "context": {
+                "users": {
+                    "tenants": 1,
+                    "users_per_tenant": 1
+                }
+            }
+        }
+    ]
+}
+
